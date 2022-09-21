@@ -2,6 +2,8 @@
 Get secrets.json from password manager
 Install ovh: `pip install ovh`
 
+(after git clone, do git pull --rebase origin master)
+
 # Usage
 Run by giving new ip as only argument
 
