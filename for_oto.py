@@ -3,6 +3,7 @@
 import json
 import ovh
 import sys
+import requests
 
 with open("secrets.json") as fin:
     secrets = json.loads(fin.read())
@@ -37,19 +38,28 @@ def set_ip(new_ip):
         port=80,
     )
 
-print("Current status")
-server_check = get_ip()
-print(json.dumps(server_check, indent=4))
+def current_ip():
+    url = 'http://myexternalip.com/raw'
+    r = requests.get(url)
+    ip = r.text
+    return ip
 
-if len(sys.argv) == 2:
-    new_ip = sys.argv[1]
-    if len(sys.argv[1].split(".")) == 4:
-        
-        if server_check["address"] == new_ip:
-            print("New IP identical to old. No change required.")
-        else:
-            print("New IP set:", new_ip)
-            result = set_ip(new_ip)
-            print(json.dumps(result, indent=4))
-    else:
-        print("Incorrect IP given: ", new_ip)
+current_ext_ip = current_ip()
+print("Current External IP", current_ext_ip)
+
+ovh_ip = get_ip()
+ovh_ip = ovh_ip["address"]
+print("Current OVH IP", ovh_ip)
+
+result = None
+if current_ext_ip != ovh_ip:
+    print("New OVH IP set:", current_ext_ip)
+    result = set_ip(current_ext_ip)
+
+message = {
+    "current_ext": current_ext_ip,
+    "current_ovh": ovh_ip,
+    "ovh_returned": result
+}
+
+print(json.dumps(message, indent=4))
