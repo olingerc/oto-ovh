@@ -51,5 +51,8 @@ if len(sys.argv) == 2:
             print("New IP set:", new_ip)
             result = set_ip(new_ip)
             print(json.dumps(result, indent=4))
+    elif sys.argv[1] == "test":
+        # Try setting current adress
+        set_ip(server_check["address"])
     else:
         print("Incorrect IP given: ", new_ip)

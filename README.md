@@ -6,6 +6,7 @@ Install ovh: `pip install ovh`
 
 # Usage
 Run by giving new ip as only argument
+OR give `test` to set curernt IP again
 
 
 # Dev Notes
